@@ -19,7 +19,7 @@ python scripts/check_synthetic_pipeline.py --output-dir local/synthetic-review
 
 Existing output directories are rejected rather than overwritten. Relative output paths are relative to the caller. If a retained run fails, inspect its `pipeline.log`; choose another directory for the next attempt. Generated files stay under the ignored `local/` directory in this example.
 
-`python scripts/check.py` also runs the integration tests and fault-injection cases. The existing GitHub workflow invokes this same command. No separate service, secret, GPU or dataset download is required. Hosted CI execution remains unverified until the repository is pushed and the workflow runs.
+`python scripts/check.py` also runs the integration tests and fault-injection cases. The existing GitHub workflow invokes this same command. No separate service, secret, GPU or dataset download is required. GitHub-hosted lightweight CI [passed for commit `57b1ead`](https://github.com/Hanibote0624/lob-return-forecasting/actions/runs/35343126972) on 2026-09-18. This run does not cover TensorFlow model tests, GPU training or Windows execution.
 
 ## Fixture
 

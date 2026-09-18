@@ -1,5 +1,6 @@
 # Irregular-Time LOB Return Forecasting
 
+[![Correctness checks](https://github.com/Hanibote0624/lob-return-forecasting/actions/workflows/checks.yml/badge.svg?branch=main)](https://github.com/Hanibote0624/lob-return-forecasting/actions/workflows/checks.yml)
 **Short-horizon return regression from Level-2 order-book factors and observed event times.**
 
 [中文说明](README.zh-CN.md) · [Project walkthrough / 项目详解](docs/project_walkthrough.zh-CN.md) · [Architecture](docs/architecture.md) · [Verification evidence](docs/evidence.md)
@@ -37,14 +38,15 @@ See [architecture and trade-offs](docs/architecture.md), [label rules](docs/data
 
 ## Evidence and limits
 
-These are **recorded V6 checks**, with source fingerprints that match the unchanged implementation in this release. They measure implementation correctness, not forecasting quality.
+The recorded V6 checks and the hosted CI run below provide evidence for specific implementation behaviors, not forecasting quality. V6 source fingerprints match the implementation in this release.
 
 | Evidence | What was checked | Boundary |
 | --- | --- | --- |
 | [80 non-TensorFlow tests](docs/verification/v6_checks_summary.json) | Labels, time precision, chronological configuration, packing, alignment, failure propagation and backtest rules | Synthetic fixtures and selected regression cases |
 | [Complete synthetic Stage1–5 runs](docs/verification/v6_synthetic_summary.json) | Every generated label and eligible window against independent references; held-out changes leave training statistics unchanged | Eight synthetic sessions per case; no predictive-performance estimate |
 | [13 model/integration tests](docs/verification/v6_model_components.json) | Weighted losses/metrics, float32 and mixed-bfloat16 arithmetic, save/load, prediction generation/reuse and evaluation | Small CPU checks with a temporary model fixture; not a Stage6 GPU research run |
-| GPU acceptance and hosted CI | Entry points/workflow provided | GPU success path and GitHub-hosted execution still pending |
+| [Hosted CI](https://github.com/Hanibote0624/lob-return-forecasting/actions/runs/35343126972) | Development checks, synthetic Stage1–5 integration, shell syntax and configuration dry-run | Passed for commit `57b1ead`; excludes TensorFlow model tests and GPU training |
+| GPU acceptance | Separate verification command provided | GPU success path remains unverified |
 
 No current-version test-set IC, directional accuracy, trading return or superiority over LightGBM is claimed. The [evidence guide](docs/evidence.md) maps each claim to its source and explains what would be needed for a research-result claim.
 

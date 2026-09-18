@@ -21,7 +21,7 @@ Use this checklist before making the GitHub repository public.
 
 - [ ] Resolve the correctness items recorded in the private audit before claiming reproducibility.
 - [x] Add synthetic unit and targeted integration tests for timestamps, labels, window loading, inference alignment, backtest rules and pipeline configuration.
-- [x] Add local development checks and a matching lightweight CI workflow. GitHub-hosted execution is still pending upload.
+- [x] Add local development checks and a matching lightweight CI workflow. GitHub-hosted lightweight CI [passed for commit `57b1ead`](https://github.com/Hanibote0624/lob-return-forecasting/actions/runs/35343126972) on 2026-09-18. This run does not cover TensorFlow model tests, GPU training or Windows execution.
 - [x] Run small TensorFlow component and serialization checks on CPU; record versions and source hashes.
 - [x] Bind target definitions and scaling through training/prediction/evaluation artifacts.
 - [ ] Verify the separate GPU acceptance command and pin a tested CUDA environment.

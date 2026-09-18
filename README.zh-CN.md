@@ -1,5 +1,6 @@
 # 不规则事件时间下的 LOB 短期收益预测
 
+[![Correctness checks](https://github.com/Hanibote0624/lob-return-forecasting/actions/workflows/checks.yml/badge.svg?branch=main)](https://github.com/Hanibote0624/lob-return-forecasting/actions/workflows/checks.yml)
 **利用 Level-2 订单簿已有因子与真实事件时间，研究未来数秒的收益回归。**
 
 [English](README.md) · [项目详解](docs/project_walkthrough.zh-CN.md) · [模型与管线架构](docs/architecture.md) · [验证证据](docs/evidence.md)
@@ -37,14 +38,15 @@
 
 ## 已有证据及适用范围
 
-以下是 **V6 已记录的检查结果**，对应源码在本次文档版中保持不变。它们支持工程正确性判断，不能代替真实数据上的预测效果。
+下面包含 V6 已记录的检查结果及首次 GitHub 托管 CI 运行。V6 对应源码在本次文档更新中保持不变；这些证据支持指定实现行为的正确性，不代表真实数据上的预测效果。
 
 | 证据 | 检查内容 | 范围 |
 | --- | --- | --- |
 | [80 项非 TensorFlow 测试](docs/verification/v6_checks_summary.json) | 标签、时间精度、配置、打包、预测对齐、失败停止和回测规则 | 合成数据与指定回归用例 |
 | [完整合成 Stage1—5 检查](docs/verification/v6_synthetic_summary.json) | 所有合成标签和有效窗口与独立参考实现对照；改变验证/测试数据不改变训练统计 | 每个场景 8 个合成交易时段，不测预测收益 |
 | [13 项模型与集成检查](docs/verification/v6_model_components.json) | 损失与指标、两种精度策略、保存加载、预测生成与复用、评估 | CPU 小规模组件及临时模型用例，不是 Stage6 的 GPU 研究训练 |
-| GPU 验收与托管 CI | 已提供命令和工作流 | GPU 成功路径与 GitHub 上的执行尚未验证 |
+| [GitHub 托管 CI](https://github.com/Hanibote0624/lob-return-forecasting/actions/runs/35343126972) | 开发检查、合成 Stage1—5 集成检查、Shell 语法与配置预览 | 提交 `57b1ead` 已通过；不包含 TensorFlow 模型测试和 GPU 训练 |
+| GPU 验收 | 已提供独立验证命令 | GPU 成功路径尚未验证 |
 
 当前版本不宣称测试集 IC、方向准确率、交易收益或优于 LightGBM。各项证据与代码的对应关系见[证据说明](docs/evidence.md)。
 

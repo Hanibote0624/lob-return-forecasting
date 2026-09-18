@@ -15,7 +15,7 @@ This page distinguishes code behavior, recorded synthetic verification and pendi
 
 These counts overlap in purpose: the full preparation fixture is also used in the 80-test suite. They must not be presented as independent experiments or added together as 95 research runs. The 13 model checks include eight loss/precision combinations inside one test method.
 
-The temporary predictor checkpoint is explicitly constructed by the test harness. It is not produced by a complete Stage6 research run. Recorded checks were performed on Linux; no Windows execution or hosted GitHub CI success is implied.
+The temporary predictor checkpoint is explicitly constructed by the test harness. It is not produced by a complete Stage6 research run. GitHub-hosted lightweight CI [passed for commit `57b1ead`](https://github.com/Hanibote0624/lob-return-forecasting/actions/runs/35343126972) on 2026-09-18. This run does not cover TensorFlow model tests, GPU training or Windows execution.
 
 ## Concrete claims and their evidence
 

@@ -35,7 +35,7 @@ python scripts/check_model.py --device cpu --report-path local/model-check/repor
 
 The recorded run used TensorFlow 2.20.0, Keras 3.15.1 and NumPy 2.3.5. The [component report](verification/v6_model_components.json) includes actual package versions and source hashes. All 13 test methods passed. The suite includes eight loss/policy combinations for compiled updates and save/load, plus a real prediction-CLI integration fixture that checks generation, reuse, evaluation and stale-bundle rejection. Its tiny checkpoint and contract are constructed explicitly in the test; this does not execute Stage6.fit. No real data or GPU was used. The dependency file pins direct model dependencies; the report is not a complete lockfile for every transitive dependency.
 
-The lightweight `scripts/check.py` still runs without TensorFlow. It compiles the model-check sources but does not execute them. Hosted CI has not been run.
+The lightweight `scripts/check.py` still runs without TensorFlow. It compiles the model-check sources but does not execute them. GitHub-hosted lightweight CI [passed for commit `57b1ead`](https://github.com/Hanibote0624/lob-return-forecasting/actions/runs/35343126972) on 2026-09-18. This run does not cover TensorFlow model tests, GPU training or Windows execution.
 
 ## Run the separate GPU acceptance check
 

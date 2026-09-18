@@ -61,6 +61,6 @@ Before labeling this environment verified, run the custom-layer/model round trip
 
 The GitHub workflow installs only `requirements/dev.txt` on Ubuntu with Python 3.12 and runs `scripts/check.py`, Bash syntax checks, and a dry run. V5's full synthetic Stage1–5 runs and fault-injection tests are included in that check command. It needs neither secrets nor private market data. It has read-only repository permissions and does not train, deploy, or upload datasets. The action usage follows the official [checkout](https://github.com/actions/checkout) and [setup-python](https://github.com/actions/setup-python) documentation.
 
-The same commands have been checked locally. The GitHub-hosted workflow has not been run before the repository is uploaded; no passing GitHub badge is claimed.
+The same commands have been checked locally. GitHub-hosted lightweight CI [passed for commit `57b1ead`](https://github.com/Hanibote0624/lob-return-forecasting/actions/runs/35343126972) on 2026-09-18. This run does not cover TensorFlow model tests, GPU training or Windows execution.
 
 V6 adds [separate model/GPU verification commands](model_verification.md). CPU component success does not validate the CUDA-extra dependency graph or a GPU run.
