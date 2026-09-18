@@ -1,6 +1,7 @@
 # Irregular-Time LOB Return Forecasting
 
 [![Correctness checks](https://github.com/Hanibote0624/lob-return-forecasting/actions/workflows/checks.yml/badge.svg?branch=main)](https://github.com/Hanibote0624/lob-return-forecasting/actions/workflows/checks.yml)
+
 **Short-horizon return regression from Level-2 order-book factors and observed event times.**
 
 [中文说明](README.zh-CN.md) · [Project walkthrough / 项目详解](docs/project_walkthrough.zh-CN.md) · [Architecture](docs/architecture.md) · [Verification evidence](docs/evidence.md)

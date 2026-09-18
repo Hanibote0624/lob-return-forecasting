@@ -1,6 +1,7 @@
 # 不规则事件时间下的 LOB 短期收益预测
 
 [![Correctness checks](https://github.com/Hanibote0624/lob-return-forecasting/actions/workflows/checks.yml/badge.svg?branch=main)](https://github.com/Hanibote0624/lob-return-forecasting/actions/workflows/checks.yml)
+
 **利用 Level-2 订单簿已有因子与真实事件时间，研究未来数秒的收益回归。**
 
 [English](README.md) · [项目详解](docs/project_walkthrough.zh-CN.md) · [模型与管线架构](docs/architecture.md) · [验证证据](docs/evidence.md)
