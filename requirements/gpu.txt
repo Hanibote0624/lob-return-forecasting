@@ -1,0 +1,5 @@
+# Candidate environment only: NOT yet verified by a GPU training run.
+# Linux/WSL2 x86-64, Python 3.12. See docs/environment.md.
+-r core.txt
+tensorflow[and-cuda]==2.20.0
+keras==3.15.1

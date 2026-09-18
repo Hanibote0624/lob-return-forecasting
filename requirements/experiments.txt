@@ -1,0 +1,6 @@
+# Optional historical scripts; not required by the main correctness checks.
+# These packages are not part of a reproduced historical environment.
+-r core.txt
+lightgbm==4.6.0
+pyarrow==19.0.1
+plotly==6.0.1

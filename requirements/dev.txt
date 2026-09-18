@@ -1,0 +1,2 @@
+-r core.txt
+ruff==0.15.6

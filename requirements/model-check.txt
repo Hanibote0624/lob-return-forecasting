@@ -1,0 +1,4 @@
+# TensorFlow component checks only; this does not enable CPU research training.
+-r core.txt
+tensorflow==2.20.0
+keras==3.15.1

@@ -1,0 +1,2 @@
+# Compatibility entry point for V3's documented test command.
+-r requirements/core.txt

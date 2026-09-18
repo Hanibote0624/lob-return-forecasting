@@ -1,0 +1,69 @@
+{
+  "status": "passed",
+  "scope": "V7 documentation and packaging; V6 implementation preserved",
+  "base_archive": "lob-return-forecasting-github-candidate-v6-technical.zip",
+  "base_archive_sha256": "8888e5fd95f22b49f48417a23c663ef7a5bd6ea14e3d29492d2e6303eb864985",
+  "base_archive_file_count": 78,
+  "preserved_runtime_config_test_files": 58,
+  "preserved_verification_records": [
+    "docs/verification/v5_synthetic_summary.json",
+    "docs/verification/v6_checks_summary.json",
+    "docs/verification/v6_model_components.json",
+    "docs/verification/v6_synthetic_summary.json"
+  ],
+  "modified_existing_files": [
+    "CHANGELOG.md",
+    "README.md",
+    "docs/development.md",
+    "docs/release_checklist.md",
+    "docs/synthetic_verification.md"
+  ],
+  "checks": {
+    "v6_source_fingerprints_match": true,
+    "relative_links_checked": 124,
+    "markdown_fences_balanced": true,
+    "markdown_trailing_whitespace": "none",
+    "mermaid_model_graph": {
+      "nodes": 7,
+      "edges": 6,
+      "check": "structural only; GitHub rendering not exercised"
+    },
+    "svg_has_no_scripts_or_external_assets": true,
+    "schematic_png_visually_reviewed": true,
+    "public_example_values_checked_against_config": true,
+    "readme_dry_run": {
+      "exit_code": 0,
+      "python": "3.12.14",
+      "stages": [
+        "manifest",
+        "labels",
+        "pack",
+        "windows",
+        "healthcheck",
+        "train",
+        "predict",
+        "evaluate"
+      ],
+      "gpu_stages": [
+        "train",
+        "predict"
+      ]
+    }
+  },
+  "previous_v6_results": {
+    "core_tests_passed": 80,
+    "model_component_integration_tests_passed": 13,
+    "rerun_in_this_documentation_update": false
+  },
+  "gpu_training_executed": false,
+  "real_data_used": false,
+  "github_hosted_ci_executed": false,
+  "github_repository_published": false,
+  "interview_guide_in_public_archive": false,
+  "notes": [
+    "Only documentation and conceptual assets change in this release.",
+    "V6 test records are preserved; current source fingerprints were verified.",
+    "The timeline is an illustration, not an empirical result.",
+    "External URLs were not revalidated; relative repository links were checked."
+  ]
+}

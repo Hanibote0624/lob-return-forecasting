@@ -1,0 +1,507 @@
+{
+  "project": {
+    "name": "lob_short_horizon_regression",
+    "project_root": ".",
+    "seed": 42
+  },
+  "data": {
+    "stocks": [
+      {
+        "stock_code": "SAMPLE",
+        "raw_root": "local/raw_data/SAMPLE",
+        "out_root": "local/stage0_enriched/SAMPLE",
+        "float_shares": 100000000.0,
+        "comment": "Placeholder only. Set the code, paths, and date-appropriate float shares before running."
+      }
+    ],
+    "date_range": {
+      "start": "20250101",
+      "end": "20250630"
+    },
+    "file_pattern": {
+      "daily_dir": "{YYYYMMDD}",
+      "csv_name": "{stock_code}_{YYYYMMDD}_{session}.csv",
+      "sessions": [
+        1,
+        2
+      ]
+    },
+    "required_columns": {
+      "timestamp": "timestamp",
+      "mid_price": {
+        "prefer_bidask": true,
+        "bid1": "bid",
+        "ask1": "ask",
+        "fallback_last": "last"
+      },
+      "factors": {
+        "prefix": "gpmain_",
+        "allow_prefixes": [
+          "gpmain_"
+        ],
+        "count": 109
+      },
+      "market": {
+        "columns": {
+          "ask_price": "ask",
+          "bid_price": "bid",
+          "ask_volume": "az",
+          "bid_volume": "bz"
+        }
+      }
+    },
+    "timestamp_parse": {
+      "mode": "HHMMSSmmm_to_seconds",
+      "assume_int_digits": 9
+    },
+    "splits": {
+      "train": {
+        "start": "20250101",
+        "end": "20250430"
+      },
+      "val": {
+        "start": "20250501",
+        "end": "20250531"
+      },
+      "test": {
+        "start": "20250601",
+        "end": "20250630"
+      }
+    },
+    "session_rules": {
+      "no_cross_session_windows": true,
+      "no_cross_day_windows": true,
+      "ffill_within_session": true,
+      "fill_remaining_nan": 0.0,
+      "max_history_span_seconds": 10.0,
+      "max_inter_event_gap_seconds": 0.0
+    },
+    "market": {
+      "columns": {
+        "acc_volume": "acc_volume",
+        "bid": "bid",
+        "ask": "ask",
+        "last": "last",
+        "mid": null
+      }
+    }
+  },
+  "audit": {
+    "scale_audit": {
+      "q": 0.9,
+      "ratio_tol": 2.0,
+      "chunksize": 200000,
+      "per_chunk_sample": 5000,
+      "sample_max": 200000,
+      "ema_span": 200,
+      "dv_floor": 1.0,
+      "mcap_floor": 1.0
+    }
+  },
+  "features": {
+    "window_W": 64,
+    "num_factors": 109,
+    "dtype": "float32"
+  },
+  "horizons": {
+    "definitions": {
+      "h2_5_3_5": {
+        "min_seconds": 2.5,
+        "max_seconds": 3.5
+      },
+      "h0_5_2_0": {
+        "min_seconds": 0.5,
+        "max_seconds": 2.0
+      },
+      "h9_5_10_5": {
+        "min_seconds": 9.5,
+        "max_seconds": 10.5
+      },
+      "h0_2_1_2": {
+        "min_seconds": 0.2,
+        "max_seconds": 1.2
+      }
+    },
+    "active_horizon_id": "h2_5_3_5"
+  },
+  "label": {
+    "use_raw_for_weighting": true,
+    "future_aggregation": "event_mean",
+    "require_full_horizon": true,
+    "min_future_observations": 1,
+    "scale_mode": "fixed_multiplier",
+    "fixed_scale": 200.0,
+    "clip_mode": "q99_abs_train_only",
+    "eps": 1e-12,
+    "store_raw_and_scaled": true
+  },
+  "sample_weight": {
+    "mode": "abs_r_q90_train_only",
+    "alpha": 0.5,
+    "clip_max": 3.0,
+    "min_weight": 1.0,
+    "max_weight": 4.0
+  },
+  "train": {
+    "run_name": "sample_h2_5_3_5_gpu",
+    "seed": 42,
+    "strategy": "mirrored",
+    "mixed_precision": false,
+    "global_batch": 4096,
+    "epochs": 100,
+    "base_lr": 0.0004,
+    "warmup_ratio": 0.1,
+    "min_lr_ratio": 0.05,
+    "loss": "ccc",
+    "require_input_stats": true,
+    "early_stop_patience": 10,
+    "jit_compile": false,
+    "steps_per_epoch": 0,
+    "val_steps": 0,
+    "test_steps": 0,
+    "optimizer": {
+      "name": "adamw",
+      "weight_decay": 0.0001,
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-07,
+      "clipnorm": 0.5
+    }
+  },
+  "model": {
+    "d_model": 64,
+    "num_heads": 4,
+    "num_layers": 2,
+    "ff_dim": 128,
+    "dropout": 0.1,
+    "use_lstm": true,
+    "lstm_units": 128,
+    "head_hidden": 128,
+    "use_time_aware_pos": true,
+    "max_timescale": 10000.0,
+    "time_scale": 100.0
+  },
+  "eval": {
+    "report_topk_abs_pred": [
+      0.01,
+      0.05,
+      0.1
+    ],
+    "bucket_quantiles": 10,
+    "metrics": [
+      "mae_raw",
+      "rmse_raw",
+      "pearson",
+      "spearman",
+      "dir_acc",
+      "topk_edge",
+      "bucket_calibration"
+    ]
+  },
+  "paths": {
+    "manifests_dir": "data/manifests",
+    "labels_dir": "data/labels",
+    "packs_dir": "data/packs",
+    "stats_dir": "data/stats",
+    "models_dir": "results/models",
+    "logs_dir": "results/logs",
+    "eval_dir": "results/eval",
+    "results_dir": "results"
+  },
+  "stage0": {
+    "enabled": false,
+    "num_workers": 32,
+    "use_stage1_ok_manifest": false,
+    "out_root": "data/stage0_enriched",
+    "suffix": "",
+    "overwrite": false,
+    "prefix": "s0_",
+    "levels": 4,
+    "impact_fracs": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "persistent_m": 5,
+    "flicker_window": 50,
+    "ofi_ema_span": 50,
+    "ofi_vol_window": 50,
+    "float32_new_cols": true,
+    "max_files": 0,
+    "eps": 1e-12,
+    "output_mode": "append",
+    "append_rename_as_gpmain": true,
+    "append_drop_unmapped_s0": true,
+    "strict_keep_features": true,
+    "keep_features": [
+      "base_rel_spread_z5",
+      "base_microprice_dev_z5",
+      "base_log_depth_total_L4_z5",
+      "base_obi_L4_z5",
+      "base_wobi_L4_z5",
+      "base_slope_bid_L4_z5",
+      "base_slope_ask_L4_z5",
+      "base_slope_asym_z5",
+      "base_curv_bid_L1_over_L4_z5",
+      "base_curv_ask_L1_over_L4_z5",
+      "base_impact_asym_f0_25_z5",
+      "base_impact_asym_f0_5_z5",
+      "base_impact_asym_f0_75_z5",
+      "base_illiq_z5",
+      "base_log_depth_bid_L1_z5",
+      "base_log_depth_ask_L1_z5"
+    ],
+    "rename": {
+      "prefix": "gpmain_",
+      "start_index": null
+    },
+    "export_factor_map_path": "data/stage0_enriched/stage0_factor_map.json",
+    "ofi_norm": {
+      "enabled": false,
+      "dv_ema_span": 200,
+      "dv_floor": 1.0
+    },
+    "baseline": {
+      "enabled": false,
+      "baseline_root": "data/stage0_baseline_stats",
+      "lookback_days": 5,
+      "bucket_seconds": 30,
+      "z_clip": 8.0,
+      "use_z_clip": false,
+      "use_metric_clip_abs": false,
+      "sigma_floor": 1e-06,
+      "min_bucket_samples": 10,
+      "build_stats_before_enrich": true,
+      "overwrite_stats": false,
+      "auto_build_if_missing": true,
+      "strict_metrics": true,
+      "metric_specs": [
+        {
+          "name": "rel_spread",
+          "source": "rel_spread",
+          "clip_abs": 0.05
+        },
+        {
+          "name": "microprice_dev",
+          "source": "microprice_dev",
+          "clip_abs": 0.02
+        },
+        {
+          "name": "log_depth_total_L4",
+          "source": "log_depth_total_L4",
+          "clip_abs": 20.0
+        },
+        {
+          "name": "obi_L4",
+          "source": "obi_L4",
+          "clip_abs": 1.0
+        },
+        {
+          "name": "wobi_L4",
+          "source": "wobi_L4",
+          "clip_abs": 1.0
+        },
+        {
+          "name": "slope_bid_L4",
+          "source": "slope_bid_L4",
+          "clip_abs": 5.0
+        },
+        {
+          "name": "slope_ask_L4",
+          "source": "slope_ask_L4",
+          "clip_abs": 5.0
+        },
+        {
+          "name": "slope_asym",
+          "source": "slope_asym",
+          "clip_abs": 5.0
+        },
+        {
+          "name": "curv_bid_L1_over_L4",
+          "source": "curv_bid_L1_over_L4",
+          "clip_abs": 20.0
+        },
+        {
+          "name": "curv_ask_L1_over_L4",
+          "source": "curv_ask_L1_over_L4",
+          "clip_abs": 20.0
+        },
+        {
+          "name": "impact_asym_f0_25",
+          "source": "impact_asym_f0_25",
+          "clip_abs": 0.1
+        },
+        {
+          "name": "impact_asym_f0_5",
+          "source": "impact_asym_f0_5",
+          "clip_abs": 0.1
+        },
+        {
+          "name": "impact_asym_f0_75",
+          "source": "impact_asym_f0_75",
+          "clip_abs": 0.1
+        },
+        {
+          "name": "illiq",
+          "source": "illiq",
+          "clip_abs": 1.0
+        },
+        {
+          "name": "log_depth_bid_L1",
+          "source": "log_depth_bid_L1",
+          "clip_abs": 20.0
+        },
+        {
+          "name": "log_depth_ask_L1",
+          "source": "log_depth_ask_L1",
+          "clip_abs": 20.0
+        }
+      ]
+    }
+  },
+  "stage1": {
+    "timestamp_sample_rows": 50000,
+    "num_workers": 16,
+    "manifest_tag": "sample",
+    "manifest_all_path": "data/manifests/sessions_manifest_sample.jsonl",
+    "manifest_ok_path": "data/manifests/sessions_ok_sample.jsonl",
+    "manifest_bad_path": "data/manifests/sessions_bad_sample.jsonl",
+    "summary_path": "data/manifests/stage1_summary_sample.json",
+    "schema_path": "data/stats/schema_factors_sample.json"
+  },
+  "stage1_5": {
+    "out_dir": "data/stage1_5_scale_audit",
+    "use_train_split_only": true,
+    "manifest_ok_path": null,
+    "comment": "Optional multi-stock audit. For a multi-stock run, execute it and set stage3.feature_norm_map_path to its factor_norm_map.json."
+  },
+  "stage2": {
+    "num_workers": 16,
+    "strict": true,
+    "labels_raw_dir": "data/labels_raw",
+    "labels_final_dir": "data/labels",
+    "label_stats_path": "data/stats/label_stats_{horizon_id}.json",
+    "labels_index_path": "data/labels/{horizon_id}/labels_index_sample.jsonl",
+    "stage2_summary_path": "data/labels/{horizon_id}/stage2_summary_sample.json",
+    "quantile_sample_per_session": 5000,
+    "max_clip_abs_scaled": 10.0
+  },
+  "stage3": {
+    "packed_root": "data/packs",
+    "row_shard_rows": 6000000,
+    "write_y_raw": true,
+    "write_t_sec": true,
+    "write_is_valid": true,
+    "strict_rowcount_match": true,
+    "strict_label_integrity": true,
+    "strict_no_nan_X": true,
+    "compute_input_stats_train": true,
+    "input_stats_path": "data/stats/input_factors_stats_{horizon_id}.json",
+    "packs_manifest_path": "data/packs/{horizon_id}/packs_manifest.json",
+    "feature_norm_map_path": null,
+    "log_every_sessions": 20,
+    "input_stats_only_valid": true,
+    "final_schema_path": "data/stats/schema_factors_stage3_{horizon_id}.json"
+  },
+  "stage4": {
+    "stage4_manifest_path": "data/stage4/{horizon_id}/stage4_manifest.json",
+    "block_size_ends": 4096,
+    "strict": true,
+    "copy_stage3_schema": true
+  },
+  "dataloader": {
+    "mmap_cache_items": 16,
+    "prefetch_batches": 4,
+    "drop_remainder_train": true,
+    "drop_remainder_eval": false,
+    "shuffle_blocks_train": true,
+    "seed": 42
+  },
+  "stage5": {
+    "report_path": "data/stage5/{horizon_id}/stage5_report.json",
+    "seed": 42,
+    "mmap_cache_items": 16,
+    "row_samples_per_split": {
+      "train": 50000,
+      "val": 20000,
+      "test": 20000
+    },
+    "window_samples_per_split": {
+      "train": 5000,
+      "val": 2000,
+      "test": 2000
+    },
+    "strict": true,
+    "per_stock_breakdown": true
+  },
+  "predict": {
+    "comment": "预测阶段配置",
+    "run_name": "sample_h2_5_3_5_gpu",
+    "output_root": "predictions/{horizon_id}/{run_name}",
+    "splits": [
+      "val",
+      "test"
+    ],
+    "batch_size": 4096,
+    "contract_path": "results/{run_name}/model_contract.json",
+    "model_path": "results/{run_name}/models/final.keras",
+    "best_weights_path": "results/{run_name}/models/best.weights.h5",
+    "use_best_weights": true,
+    "overwrite": true,
+    "strict_complete": true,
+    "gpu_id": 0
+  },
+  "accuracy_eval": {
+    "comment": "统计评估阶段配置",
+    "pred_root": "predictions/{horizon_id}/{run_name}",
+    "report_path": "predictions/{horizon_id}/{run_name}/report_metrics.json",
+    "detail_csv_path": "predictions/{horizon_id}/{run_name}/detail_metrics.csv",
+    "splits": [
+      "test"
+    ],
+    "strict_complete": true,
+    "topk": {
+      "drops": [
+        0.001,
+        0.005,
+        0.01,
+        0.02,
+        0.03,
+        0.05
+      ],
+      "comment": "对应 0.1%, 0.5%, 1%, 2%, 3%, 5%"
+    },
+    "metrics": [
+      "ic",
+      "rank_ic",
+      "icir",
+      "topk_ret"
+    ],
+    "cost_rate": 0.0
+  },
+  "backtest": {
+    "run_name": "sample_h2_5_3_5_gpu",
+    "splits": [
+      "test"
+    ],
+    "strict_complete": true,
+    "thresholds": {
+      "mode": "calibration_split",
+      "source_split": "val"
+    },
+    "strategy": {
+      "topk_long": 0.01,
+      "topk_short": 0.01
+    },
+    "cost": {
+      "commission_rate": 0.00015,
+      "stamp_tax_rate": 0.0005,
+      "slippage_rate": 0.0
+    },
+    "output": {
+      "report_path": "backtest/{horizon_id}/{run_name}/report.json",
+      "trade_detail_csv": "backtest/{horizon_id}/{run_name}/trades.csv",
+      "curve_csv": "backtest/{horizon_id}/{run_name}/cumulative_trade_returns.csv"
+    }
+  }
+}

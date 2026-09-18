@@ -1,0 +1,47 @@
+# Local data and runtime outputs
+/raw_data/
+/data/
+/artifacts/
+/results/
+/predictions/
+/backtest/
+/logs/
+/runs/
+/checkpoints/
+/local/
+/private/
+/release-builds/
+*.npy
+*.npz
+*.h5
+*.keras
+*.parquet
+*.feather
+*.log
+events.out.tfevents.*
+
+# Python environments, caches, and coverage
+__pycache__/
+*.py[cod]
+.venv*/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+*.egg-info/
+build/
+dist/
+
+# Machine-specific settings
+.env
+.env.*
+!.env.example
+*.local.json
+*.local.yaml
+*.local.yml
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

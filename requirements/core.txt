@@ -1,0 +1,5 @@
+# Python 3.12. Direct dependencies verified by the non-TensorFlow tests.
+-c core-constraints.txt
+numpy==2.3.5
+pandas==2.2.3
+scipy==1.17.0
